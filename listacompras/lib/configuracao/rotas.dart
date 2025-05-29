@@ -1,5 +1,10 @@
 class Rotas{
   static const String home = '/';
-  static const String lista_nomes = '/lista_nomes';  
-  static const String llista_editar = '/lista_editar';  
-}
+  static const String supermercado = '/supermercado';  
+  static const String roupas = '/roupas';  
+  static const String farmacia = '/farmacia';
+  static const String eletronicos = '/eletronicos';
+  static const String petshop = '/petshop';
+  static const String mecanica = '/mecanica';
+  static const String outros = '/outros';
+} 

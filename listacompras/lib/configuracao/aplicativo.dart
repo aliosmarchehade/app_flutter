@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:listacompras/configuracao/rotas.dart';
-import 'package:listacompras/widget/TelaEditar.dart';
+import 'package:listacompras/widget/TelaEletronicos.dart';
+import 'package:listacompras/widget/TelaFarmacia.dart';
+import 'package:listacompras/widget/TelaMecanica.dart';
+import 'package:listacompras/widget/TelaOutros.dart';
+import 'package:listacompras/widget/TelaPetshop.dart';
+import 'package:listacompras/widget/TelaRoupas.dart';
 import 'package:listacompras/widget/TelaInicial.dart';
-import 'package:listacompras/widget/TelaLista.dart';
+import 'package:listacompras/widget/TelaMercado.dart';
 
 class Aplicativo extends StatelessWidget{
   const Aplicativo({key}) : super(key: key);
@@ -17,12 +22,14 @@ class Aplicativo extends StatelessWidget{
       initialRoute: Rotas.home,
       routes: {
         Rotas.home:(context) =>  TelaInicial(),
-        Rotas.lista_nomes:(context) => const TelaLista(),
-        Rotas.llista_editar:(context) => const TelaEditar(),
-        // Rotas.pessoa:(context) => const WidgetPessoa(),
-        // Rotas.categoria:(context) => const WidgetCategoria(),
-        // Rotas.produto:(context) => const WidgetProduto(),
-        // Rotas.lista_pessoa:(context) => WidgetPessoaLista(),
+        Rotas.supermercado:(context) => const TelaMercado(),
+        Rotas.roupas:(context) => const TelaRoupas(),
+        Rotas.farmacia:(context) => const TelaFarmacia(),
+        Rotas.eletronicos:(context) => const TelaEletronicos(),
+        Rotas.petshop:(context) => const TelaPetshop(),
+        Rotas.mecanica:(context) => const TelaMecanica(),
+        Rotas.outros:(context) => const TelaOutros(),
+
 
       },
     );
