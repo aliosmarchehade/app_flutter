@@ -15,7 +15,17 @@ class TelaInicial extends StatelessWidget {
             children: [
               const Text(
                 'Escolha um segmento:',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 56, 49, 49), // Nova cor para o texto
+                  shadows: const [ // Adicionando uma sombra para profundidade
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 3.0,
+                      color: Color.fromARGB(100, 0, 0, 0), // Cor da sombra (preto com opacidade)
+                    ),
+                  ],
+                ),
+                
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
