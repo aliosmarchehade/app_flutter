@@ -6,10 +6,10 @@ class TelaInicial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final double spacing = 20.0;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 148, 206, 168),
+      backgroundColor: const Color.fromARGB(255, 59, 61, 60),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(screenWidth < 400 ? 16.0 : 24.0),
@@ -21,7 +21,7 @@ class TelaInicial extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 56, 49, 49),
+                  color: Colors.white,
                   shadows: [
                     Shadow(
                       offset: Offset(2.0, 2.0),
@@ -34,24 +34,23 @@ class TelaInicial extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Expanded(
-                child: GridView.builder(
-                  itemCount: _segments.length,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: screenWidth < 500 ? 220 : 250,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 3 / 2.4, // deixa mais alto
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: _segments.map((segment) {
+                        return _buildSegmentCard(
+                          context,
+                          segment['title']!,
+                          segment['icon'] as IconData,
+                          segment['route']!,
+                          screenWidth,
+                        );
+                      }).toList(),
+                    ),
                   ),
-                  itemBuilder: (context, index) {
-                    final segment = _segments[index];
-                    return _buildSegmentCard(
-                      context,
-                      segment['title']!,
-                      segment['icon'] as IconData,
-                      segment['route']!,
-                      screenWidth,
-                    );
-                  },
                 ),
               ),
             ],
@@ -60,7 +59,7 @@ class TelaInicial extends StatelessWidget {
       ),
     );
   }
-
+  
   static final List<Map<String, dynamic>> _segments = [
     {'title': 'Supermercado', 'icon': Icons.local_grocery_store, 'route': '/supermercado'},
     {'title': 'Roupas', 'icon': Icons.checkroom, 'route': '/roupas'},
@@ -69,6 +68,8 @@ class TelaInicial extends StatelessWidget {
     {'title': 'Petshop', 'icon': Icons.pets, 'route': '/petshop'},
     {'title': 'Mecânica', 'icon': Icons.car_repair, 'route': '/mecanica'},
     {'title': 'Outros (em breve)', 'icon': Icons.hourglass_bottom, 'route': '/outros'},
+    {'title': 'Crud', 'icon': Icons.hourglass_bottom, 'route': '/crud'},
+    {'title': 'Cadastro', 'icon': Icons.hourglass_bottom, 'route': '/cadastro'},
   ];
 
   static Widget _buildSegmentCard(
@@ -87,28 +88,32 @@ class TelaInicial extends StatelessWidget {
         );
         Navigator.pushNamed(context, url);
       },
-      child: Card(
-        color: Colors.white,
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: isSmall ? 32 : 40, color: Colors.deepPurple),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: isSmall ? 13 : 15,
-                  fontWeight: FontWeight.w600,
+      child: SizedBox(
+        width: screenWidth < 500 ? 150 : 180,
+        height: 150,
+        child: Card(
+          color: Colors.white,
+          elevation: 4,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: isSmall ? 32 : 40, color: const Color.fromARGB(255, 76, 19, 175)),
+                const SizedBox(height: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: isSmall ? 13 : 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

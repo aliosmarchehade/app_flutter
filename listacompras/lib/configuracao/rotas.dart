@@ -7,4 +7,6 @@ class Rotas{
   static const String petshop = '/petshop';
   static const String mecanica = '/mecanica';
   static const String outros = '/outros';
+  static const String crud = '/crud';
+  static const String cadastro = '/cadastro';
 } 
