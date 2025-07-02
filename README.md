@@ -26,5 +26,3 @@ A navegação entre as telas é fluida, com feedback visual para o usuário. A e
 - ✅ **Validações de entrada**: impede que itens inválidos ou vazios sejam adicionados.
 - 🗂️ **Organização visual por cards**: cada segmento com seu ícone e cor personalizada.
 
-CHECK DO DIA 27/06 EQUIPE (ALI E DANIELE): Desafios 1 e 2 feitos por mim. Dani resolveu o 3º e 4º
-link do respositório: https://github.com/aliosmarchehade/spin_flow_desafio
