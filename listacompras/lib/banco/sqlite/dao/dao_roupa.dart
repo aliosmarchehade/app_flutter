@@ -4,15 +4,17 @@ import 'package:listacompras/models/roupa.dart';
 
 class DAORoupa {
   final String _sqlInserir = '''
-    INSERT OR REPLACE INTO roupas (id, nomeRoupa, tamanho, cor, dataCompra, preco)
-    VALUES (?, ?, ?, ?, ?, ?)
-  ''';
+  INSERT INTO roupas (nomeRoupa, tamanho, marca, preco)
+  VALUES (?, ?, ?, ?)
+''';
 
-  final String _sqlAtualizar = '''
-    UPDATE roupas SET 
-      nomeRoupa = ?, tamanho = ?, cor = ?, dataCompra = ?, preco = ?
-    WHERE id = ?
-  ''';
+
+final String _sqlAtualizar = '''
+  UPDATE roupas SET 
+    nomeRoupa = ?, tamanho = ?, marca = ?, preco = ?
+  WHERE id = ?
+''';
+
 
   final String _sqlConsultarTodos = 'SELECT * FROM roupas';
 
@@ -20,41 +22,46 @@ class DAORoupa {
 
   final String _sqlExcluir = 'DELETE FROM roupas WHERE id = ?';
 
-  Future<void> salvar(Roupa roupa) async {
-    final db = await Conexao.get();
+ Future<void> salvar(Roupa roupa) async {
+  final db = await Conexao.database;
+  try {
     await db.rawInsert(_sqlInserir, [
-      roupa.id,
       roupa.nomeRoupa,
       roupa.tamanho,
       roupa.marca,
       roupa.preco,
     ]);
+    print('Roupa salva com sucesso: ${roupa.nomeRoupa}');
+  } catch (e) {
+    print('Erro ao salvar roupa: $e');
   }
-
-  Future<void> atualizar(Roupa roupa) async {
-    final db = await Conexao.get();
-    await db.rawUpdate(_sqlAtualizar, [
-      roupa.nomeRoupa,
-      roupa.tamanho,
-      roupa.marca,
-      roupa.preco,
-      roupa.id,
-    ]);
-  }
+ }
+Future<void> atualizar(Roupa roupa) async {
+  final db = await Conexao.database;
+  await db.rawUpdate(_sqlAtualizar, [
+    roupa.nomeRoupa,
+    roupa.tamanho,
+    roupa.marca,
+    roupa.preco,
+    roupa.id,
+  ]);
+}
 
   Future<void> excluir(int id) async {
-    final db = await Conexao.get();
+    final db = await Conexao.database;
     await db.rawDelete(_sqlExcluir, [id]);
   }
 
   Future<List<Roupa>> consultarTodos() async {
-    final db = await Conexao.get();
-    final List<Map<String, dynamic>> maps = await db.rawQuery(_sqlConsultarTodos);
-    return maps.map(_fromMap).toList();
-  }
+  final db = await Conexao.database;
+  final List<Map<String, dynamic>> maps = await db.rawQuery(_sqlConsultarTodos);
+  print('Roupas carregadas do banco: $maps');
+  return maps.map(_fromMap).toList();
+}
+
 
   Future<Roupa?> consultarPorId(int id) async {
-    final db = await Conexao.get();
+    final db = await Conexao.database;
     final List<Map<String, dynamic>> maps = await db.rawQuery(_sqlConsultarPorId, [id]);
     if (maps.isNotEmpty) {
       return _fromMap(maps.first);
@@ -68,7 +75,7 @@ class DAORoupa {
       nomeRoupa: map['nomeRoupa'] as String,
       tamanho: map['tamanho'] as String,
       marca: map['marca'] as String,
-      preco: map['preco'] as double,
+      preco: (map['preco'] as num).toDouble(),
     );
   }
 }

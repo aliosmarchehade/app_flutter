@@ -1,20 +1,27 @@
 class Produto {
+  int? id;
   String nome;
   int quantidade;
   double preco;
-  bool comprado;
 
   Produto({
+    this.id,
     required this.nome,
     required this.quantidade,
     required this.preco,
-    this.comprado = false,
-  }) {
-    if (quantidade <= 0) throw Exception("Quantidade deve ser maior que 0"); //1ª validação
-    if (nome.isEmpty) throw Exception("Nome do produto não pode estar vazio"); //2ª validação
-  }
+  });
 
-  void marcarComoComprado() {
-    comprado = true;
-  }
+  Map<String, dynamic> toMap() => {
+    if (id != null) 'id': id,
+    'nome': nome, 
+    'quantidade': quantidade,
+    'preco': preco,
+  };
+
+  static Produto fromMap(Map<String, dynamic> map) => Produto(
+    id: map['id'],
+    nome: map['nome'],
+    quantidade: map['quantidade'],
+    preco: map['preco'],
+  );
 }

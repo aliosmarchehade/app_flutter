@@ -3,7 +3,7 @@ import 'package:listacompras/models/medicamento.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DAOMedicamento {
-  Future<Database> get _db async => await Conexao.get();
+  Future<Database> get _db async => await Conexao.database;
 
   Future<void> salvar(Medicamento medicamento) async {
     final db = await _db;

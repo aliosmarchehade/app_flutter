@@ -19,11 +19,7 @@ class ListaCompra {
     itens.remove(produto);
   }
 
-  double percentualComprado() {
-    if (itens.isEmpty) return 0;
-    int comprados = itens.where((p) => p.comprado).length;
-    return (comprados / itens.length) * 100;
-  }
+
 }
 
 //essa seria uma entidade associativa (Produto e Lista).

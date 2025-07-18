@@ -1,65 +1,106 @@
 import 'package:flutter/material.dart';
-import 'Produto.dart';
+import '../../banco/sqlite/dao/dao_produto.dart';
+import '../../models/produto.dart';
 
-class ProdutoScreen extends StatefulWidget {
-  const ProdutoScreen({Key? key}) : super(key: key);
+class FormProduto extends StatefulWidget {
+  const FormProduto({super.key});
 
   @override
-  State<ProdutoScreen> createState() => _ProdutoScreenState();
+  State<FormProduto> createState() => _FormProdutoState();
 }
 
-class _ProdutoScreenState extends State<ProdutoScreen> {
-  final List<Produto> _produtos = [];
+class _FormProdutoState extends State<FormProduto> {
+  final _formKey = GlobalKey<FormState>();
+  final _dao = ProdutoDAO();
+
   final _nomeController = TextEditingController();
   final _precoController = TextEditingController();
   final _quantidadeController = TextEditingController();
 
-  void _adicionarProduto() {
-    setState(() {
-      _produtos.add(Produto(
-        nome: _nomeController.text,
-        preco: double.tryParse(_precoController.text) ?? 0.0,
-        quantidade: int.tryParse(_quantidadeController.text) ?? 0,
-      ));
-      _nomeController.clear();
-      _precoController.clear();
-      _quantidadeController.clear();
-    });
+  int? _id;
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _precoController.dispose();
+    _quantidadeController.dispose();
+    super.dispose();
   }
 
-  void _removerProduto(int index) {
-    setState(() {
-      _produtos.removeAt(index);
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args != null && args is Produto) {
+      _id = args.id;
+      _nomeController.text = args.nome;
+      _precoController.text = args.preco.toStringAsFixed(2);
+      _quantidadeController.text = args.quantidade.toString();
+    }
+  }
+
+  void _salvar() async {
+    if (_formKey.currentState!.validate()) {
+      final produto = Produto(
+        id: _id,
+        nome: _nomeController.text,
+        preco: double.tryParse(_precoController.text) ?? 0.0,
+        quantidade: int.tryParse(_quantidadeController.text) ?? 1,
+      );
+      await _dao.salvar(produto);
+      if (!mounted) return;
+      Navigator.of(context).pop(); // ✅ volta para a lista
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("CRUD de Produtos")),
+      appBar: AppBar(
+        title: Text(_id != null ? 'Editar Produto' : 'Novo Produto'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save),
+            onPressed: _salvar,
+          ),
+        ],
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            TextField(controller: _nomeController, decoration: const InputDecoration(labelText: "Nome")),
-            TextField(controller: _precoController, decoration: const InputDecoration(labelText: "Preço"), keyboardType: TextInputType.number),
-            TextField(controller: _quantidadeController, decoration: const InputDecoration(labelText: "Quantidade"), keyboardType: TextInputType.number),
-            ElevatedButton(onPressed: _adicionarProduto, child: const Text("Adicionar Produto")),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _produtos.length,
-                itemBuilder: (context, index) {
-                  final p = _produtos[index];
-                  return ListTile(
-                    title: Text(p.nome),
-                    subtitle: Text("R\$ ${p.preco.toStringAsFixed(2)} • Qtde: ${p.quantidade}"),
-                    trailing: IconButton(icon: const Icon(Icons.delete), onPressed: () => _removerProduto(index)),
-                  );
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _nomeController,
+                decoration: const InputDecoration(labelText: 'Nome do Produto'),
+                validator: (value) =>
+                    value == null || value.trim().isEmpty ? 'Informe o nome' : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _precoController,
+                decoration: const InputDecoration(labelText: 'Preço'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  final parsed = double.tryParse(value ?? '');
+                  if (parsed == null || parsed < 0) return 'Preço inválido';
+                  return null;
                 },
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _quantidadeController,
+                decoration: const InputDecoration(labelText: 'Quantidade'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  final parsed = int.tryParse(value ?? '');
+                  if (parsed == null || parsed <= 0) return 'Quantidade inválida';
+                  return null;
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

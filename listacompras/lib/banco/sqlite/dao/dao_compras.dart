@@ -47,7 +47,7 @@ class DAOCompra {
   }
 
   Future<void> salvar(Compra compra) async {
-    final db = await Conexao.get();
+    final db = await Conexao.database;
     try {
       await db.rawInsert(_sqlSalvar, [
         compra.id,
@@ -62,7 +62,7 @@ class DAOCompra {
   }
 
   Future<void> atualizar(Compra compra) async {
-    final db = await Conexao.get();
+    final db = await Conexao.database;
     try {
       await db.rawUpdate(_sqlAtualizar, [
         compra.nomeProduto,
@@ -77,7 +77,7 @@ class DAOCompra {
   }
 
   Future<List<Compra>> consultarTodos() async {
-    final db = await Conexao.get();
+    final db = await Conexao.database;
     try {
       final List<Map<String, dynamic>> maps = await db.rawQuery(_sqlConsultarTodos);
       return Future.wait(maps.map((map) => _fromMap(map)));
@@ -87,7 +87,7 @@ class DAOCompra {
   }
 
   Future<Compra?> consultarPorId(int id) async {
-    final db = await Conexao.get();
+    final db = await Conexao.database;
     try {
       final List<Map<String, dynamic>> maps = await db.rawQuery(_sqlConsultarPorId, [id]);
       if (maps.isNotEmpty) {
@@ -100,7 +100,7 @@ class DAOCompra {
   }
 
   Future<void> excluir(int id) async {
-    final db = await Conexao.get();
+    final db = await Conexao.database;
     try {
       await db.rawDelete(_sqlExcluir, [id]);
     } catch (e) {

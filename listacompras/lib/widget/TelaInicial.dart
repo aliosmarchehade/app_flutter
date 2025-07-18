@@ -1,7 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:listacompras/widget/listas/lista_outros.dart';
 
-class TelaInicial extends StatelessWidget {
+
+class TelaInicial extends StatefulWidget {
   const TelaInicial({Key? key}) : super(key: key);
+
+  @override
+  State<TelaInicial> createState() => _TelaInicialState();
+}
+
+class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  final List<Tab> _abas = const [
+    Tab(icon: Icon(Icons.folder_copy_outlined), text: 'Cadastros'),
+    Tab(icon: Icon(Icons.list_alt_outlined), text: 'Listas'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: _abas.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,56 +36,67 @@ class TelaInicial extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 59, 61, 60),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(screenWidth < 400 ? 16.0 : 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                'Escolha um segmento:',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(2.0, 2.0),
-                      blurRadius: 3.0,
-                      color: Color.fromARGB(100, 0, 0, 0),
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: spacing,
-                      runSpacing: spacing,
-                      children: _segments.map((segment) {
-                        return _buildSegmentCard(
-                          context,
-                          segment['title']!,
-                          segment['icon'] as IconData,
-                          segment['route']!,
-                          screenWidth,
-                        );
-                      }).toList(),
-                    ),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 45, 126, 85),
+        elevation: 0,
+        title: const Text(
+          'Escolha um segmento',
+          
+          style: TextStyle(color: Colors.white),
+        ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: _abas,
+          indicatorColor: Colors.white,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.grey[400],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildCards(context, screenWidth, spacing),
+          const ListaProdutosScreen()
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCards(BuildContext context, double screenWidth, double spacing) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.all(screenWidth < 400 ? 16.0 : 24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    children: _segments.map((segment) {
+                      return _buildSegmentCard(
+                        context,
+                        segment['title']!,
+                        segment['icon'] as IconData,
+                        segment['route']!,
+                        screenWidth,
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
-  
+
   static final List<Map<String, dynamic>> _segments = [
     {'title': 'Supermercado', 'icon': Icons.local_grocery_store, 'route': '/supermercado'},
     {'title': 'Roupas', 'icon': Icons.checkroom, 'route': '/roupas'},
@@ -69,7 +106,6 @@ class TelaInicial extends StatelessWidget {
     {'title': 'Mecânica', 'icon': Icons.car_repair, 'route': '/mecanica'},
     {'title': 'Outros (em breve)', 'icon': Icons.hourglass_bottom, 'route': '/outros'},
     {'title': 'Crud', 'icon': Icons.hourglass_bottom, 'route': '/crud'},
-    {'title': 'Cadastro', 'icon': Icons.hourglass_bottom, 'route': '/cadastro'},
   ];
 
   static Widget _buildSegmentCard(

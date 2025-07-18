@@ -9,4 +9,7 @@ class Rotas{
   static const String outros = '/outros';
   static const String crud = '/crud';
   static const String cadastro = '/cadastro';
-} 
+
+  //rota de listas
+  static const String listaoutros = '/lista-outros';
+}   

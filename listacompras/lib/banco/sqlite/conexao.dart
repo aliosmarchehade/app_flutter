@@ -2,34 +2,69 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'script.dart'; 
+
+import 'script.dart'; // Certifique-se de que `criarTabelas` está aqui
+
 class Conexao {
   static Database? _db;
 
-  static Future<Database> get() async {
+  static Future<Database> get database async {
     if (_db != null) return _db!;
 
-    try {
-      if (kIsWeb) {
-        databaseFactory = databaseFactoryFfiWeb;
-      }
+    _db = await _inicializarBanco();
+    return _db!;
+  }
 
-      final path = join(await getDatabasesPath(), 'compras.db');
+  static Future<Database> _inicializarBanco() async {
+    // Definindo a factory conforme a plataforma
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    } else if (Platform.isWindows || Platform.isLinux) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
 
-      _db = await openDatabase(
-        path,
+    // Definindo o caminho do banco
+    String path;
+    if (kIsWeb) {
+      path = 'compras.db';
+    } else {
+      final databasesPath = await databaseFactory.getDatabasesPath();
+      path = join(databasesPath, 'compras.db');
+    }
+    // deleteDatabase(path);
+    // Abrindo ou criando o banco de dados
+    return await databaseFactory.openDatabase(
+      path,
+      options: OpenDatabaseOptions(
         version: 1,
-        onCreate: (db, version) async {
-          for (final sql in criarTabelas) {
-            await db.execute(sql);
-          }
-        },
-      );
+        onCreate: _criarTabelas,
+        onUpgrade: _atualizarBanco,
+      ),
+    );
+  }
 
-      return _db!;
-    } catch (e) {
-      throw Exception('Erro ao abrir o banco de dados: $e');
+   static Future<void> _criarTabelas(Database db, int version) async {
+    for (String comando in ScriptSQLite.criarTabelas) {
+      await db.execute(comando);
+    }
+
+    for (List<String> insercoes in ScriptSQLite.comandosInsercoes) {
+      for (String comando in insercoes) {
+        await db.execute(comando);
+      }
+    }
+  }
+  static Future<void> _atualizarBanco(Database db, int oldVersion, int newVersion) async {
+    // Lógica futura de migração de schema (versão)
+  }
+
+  static Future<void> fechar() async {
+    if (_db != null) {
+      await _db!.close();
+      _db = null;
     }
   }
 }
