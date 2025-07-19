@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
@@ -34,7 +33,7 @@ class Conexao {
       final databasesPath = await databaseFactory.getDatabasesPath();
       path = join(databasesPath, 'compras.db');
     }
-    // deleteDatabase(path);
+    //await databaseFactory.deleteDatabase(path);
     // Abrindo ou criando o banco de dados
     return await databaseFactory.openDatabase(
       path,

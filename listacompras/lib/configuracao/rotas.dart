@@ -7,9 +7,11 @@ class Rotas{
   static const String petshop = '/petshop';
   static const String mecanica = '/mecanica';
   static const String outros = '/outros';
-  static const String crud = '/crud';
+  static const String produtos = '/produtos';
   static const String cadastro = '/cadastro';
+  static const String categoria = '/categoria';
+
 
   //rota de listas
-  static const String listaoutros = '/lista-outros';
+  static const String listaprodutos= '/lista-produtos';
 }   

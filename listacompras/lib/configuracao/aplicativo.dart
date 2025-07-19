@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listacompras/configuracao/rotas.dart';
+import 'package:listacompras/widget/FormCategoria.dart';
 import 'package:listacompras/widget/TelaEletronicos.dart';
 import 'package:listacompras/widget/TelaFarmacia.dart';
 import 'package:listacompras/widget/TelaMecanica.dart';
@@ -9,7 +10,7 @@ import 'package:listacompras/widget/TelaRoupas.dart';
 import 'package:listacompras/widget/TelaInicial.dart';
 import 'package:listacompras/widget/TelaMercado.dart';
 import 'package:listacompras/models/produtoScreen.dart';
-import 'package:listacompras/widget/listas/lista_outros.dart';
+import 'package:listacompras/widget/listas/lista_produtos.dart';
 
 
 class Aplicativo extends StatelessWidget{
@@ -32,13 +33,14 @@ class Aplicativo extends StatelessWidget{
         Rotas.petshop:(context) => const TelaPetshop(),
         Rotas.mecanica:(context) => const TelaMecanica(),
         Rotas.outros:(context) => const TelaOutros(),
-        Rotas.crud: (context) => const FormProduto(),
-        Rotas.cadastro: (context) => const FormProduto(),
+        Rotas.produtos: (context) => const FormProduto(),
+        Rotas.categoria: (context) => const FormCategoria(),
+    
        
 
       //rotas de listas
 
-      Rotas.listaoutros:(context) => const ListaProdutosScreen(),
+      Rotas.listaprodutos:(context) => const ListaProdutosScreen(),
 
       },
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:listacompras/widget/listas/lista_outros.dart';
+import 'package:listacompras/widget/listas/lista_produtos.dart';
 
 
 class TelaInicial extends StatefulWidget {
@@ -11,6 +11,34 @@ class TelaInicial extends StatefulWidget {
 
 class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+
+  //botoes pra aba de listagem
+  Widget _buildListaAbas(BuildContext context) {
+  return ListView(
+    padding: const EdgeInsets.all(20),
+    children: [
+      _botao(context, 'Produtos', '/lista-produtos'),
+    ],
+  );
+}
+
+Widget _botao(BuildContext context, String texto, String rota) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: ElevatedButton.icon(
+      onPressed: () => Navigator.pushNamed(context, rota),
+      icon: const Icon(Icons.hourglass_bottom),
+      label: Text(texto),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        foregroundColor: const Color.fromARGB(255, 76, 19, 175),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    ),
+  );
+}
+
 
   final List<Tab> _abas = const [
     Tab(icon: Icon(Icons.folder_copy_outlined), text: 'Cadastros'),
@@ -57,7 +85,7 @@ class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStat
         controller: _tabController,
         children: [
           _buildCards(context, screenWidth, spacing),
-          const ListaProdutosScreen()
+          _buildListaAbas(context)
         ],
       ),
     );
@@ -105,7 +133,8 @@ class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStat
     {'title': 'Petshop', 'icon': Icons.pets, 'route': '/petshop'},
     {'title': 'Mecânica', 'icon': Icons.car_repair, 'route': '/mecanica'},
     {'title': 'Outros (em breve)', 'icon': Icons.hourglass_bottom, 'route': '/outros'},
-    {'title': 'Crud', 'icon': Icons.hourglass_bottom, 'route': '/crud'},
+    {'title': 'Produtos', 'icon': Icons.hourglass_bottom, 'route': '/produtos'},
+    {'title': 'Categorias', 'icon': Icons.category, 'route': '/categoria'},
   ];
 
   static Widget _buildSegmentCard(

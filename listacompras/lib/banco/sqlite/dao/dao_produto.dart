@@ -12,6 +12,7 @@ class ProdutoDAO {
       'nome': produto.nome,
       'quantidade': produto.quantidade,
       'preco': produto.preco,
+      'categoriaId': produto.categoriaId,
     };
 
     if (produto.id != null) {
@@ -37,6 +38,7 @@ class ProdutoDAO {
         nome: maps[i]['nome'],
         quantidade: maps[i]['quantidade'],
         preco: maps[i]['preco'],
+        categoriaId: maps[i]['categoriaId'],
       );
     });
   }
@@ -56,6 +58,7 @@ class ProdutoDAO {
         nome: maps[0]['nome'],
         quantidade: maps[0]['quantidade'],
         preco: maps[0]['preco'],
+        categoriaId: maps[0]['categoriaId'],
       );
     }
     return null;

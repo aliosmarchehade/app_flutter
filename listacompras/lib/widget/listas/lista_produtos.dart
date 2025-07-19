@@ -43,7 +43,7 @@ class _ListaProdutosScreenState extends State<ListaProdutosScreen> {
                       _itemLista(_produtos[index]),
                 ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, Rotas.cadastro)
+        onPressed: () => Navigator.pushNamed(context, Rotas.produtos)
             .then((_) => _carregar()),
         child: const Icon(Icons.add),
       ),
@@ -59,7 +59,7 @@ class _ListaProdutosScreenState extends State<ListaProdutosScreen> {
       ),
       onTap: () => Navigator.pushNamed(
         context,
-        Rotas.cadastro,
+        Rotas.produtos,
         arguments: produto,
       ).then((_) => _carregar()),
       trailing: IconButton(

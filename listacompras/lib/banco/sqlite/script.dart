@@ -28,19 +28,27 @@ class ScriptSQLite {
     )
     ''',
     '''
+
+    CREATE TABLE categoria (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      descricao TEXT
+    )
+    ''',
+    '''
     CREATE TABLE produtos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
       quantidade INTEGER NOT NULL,
-      preco REAL NOT NULL
+      preco REAL NOT NULL,
+      categoriaId INTEGER,
+      FOREIGN KEY(categoriaId) REFERENCES categoria(id)
     )
     '''
   ];
 
   static List<List<String>> comandosInsercoes = [
     [
-      "INSERT INTO categoria (nome, descricao) VALUES ('Sobremesa', 'Doces em geral');",
-      "INSERT INTO categoria (nome, descricao) VALUES ('Prato principal', 'Almoço ou jantar');",
     ],
     [],
     [],

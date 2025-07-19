@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../banco/sqlite/dao/dao_produto.dart';
+import '../../banco/sqlite/dao/dao_categoria.dart';
 import '../../models/produto.dart';
+import '../../models/categoria.dart';
 
 class FormProduto extends StatefulWidget {
   const FormProduto({super.key});
@@ -12,19 +14,27 @@ class FormProduto extends StatefulWidget {
 class _FormProdutoState extends State<FormProduto> {
   final _formKey = GlobalKey<FormState>();
   final _dao = ProdutoDAO();
+  final _categoriaDao = CategoriaDAO();
 
   final _nomeController = TextEditingController();
   final _precoController = TextEditingController();
   final _quantidadeController = TextEditingController();
 
   int? _id;
+  List<Categoria> _categorias = [];
+  Categoria? _categoriaSelecionada;
 
   @override
-  void dispose() {
-    _nomeController.dispose();
-    _precoController.dispose();
-    _quantidadeController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _carregarCategorias();
+  }
+
+  void _carregarCategorias() async {
+    final categorias = await _categoriaDao.buscarTodas();
+    setState(() {
+      _categorias = categorias;
+    });
   }
 
   @override
@@ -36,21 +46,45 @@ class _FormProdutoState extends State<FormProduto> {
       _nomeController.text = args.nome;
       _precoController.text = args.preco.toStringAsFixed(2);
       _quantidadeController.text = args.quantidade.toString();
+
+      // Define a categoria selecionada (assume que as categorias já foram carregadas)
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+  setState(() {
+    if (_categorias.isNotEmpty) {
+      _categoriaSelecionada = _categorias.firstWhere(
+        (cat) => cat.id == args.categoriaId,
+        orElse: () => _categorias.first,
+      );
+    } else {
+      _categoriaSelecionada = null;  // aqui sim pode ser null, porque a variável permite
+    }
+  });
+});
+
     }
   }
 
   void _salvar() async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && _categoriaSelecionada != null) {
       final produto = Produto(
         id: _id,
         nome: _nomeController.text,
         preco: double.tryParse(_precoController.text) ?? 0.0,
         quantidade: int.tryParse(_quantidadeController.text) ?? 1,
+        categoriaId: _categoriaSelecionada!.id!,
       );
       await _dao.salvar(produto);
       if (!mounted) return;
       Navigator.of(context).pop(); // ✅ volta para a lista
     }
+  }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _precoController.dispose();
+    _quantidadeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,7 +103,7 @@ class _FormProdutoState extends State<FormProduto> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
                 controller: _nomeController,
@@ -98,6 +132,24 @@ class _FormProdutoState extends State<FormProduto> {
                   if (parsed == null || parsed <= 0) return 'Quantidade inválida';
                   return null;
                 },
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<Categoria>(
+                value: _categoriaSelecionada,
+                decoration: const InputDecoration(labelText: 'Categoria'),
+                items: _categorias.map((categoria) {
+                  return DropdownMenuItem(
+                    value: categoria,
+                    child: Text(categoria.nome),
+                  );
+                }).toList(),
+                onChanged: (nova) {
+                  setState(() {
+                    _categoriaSelecionada = nova;
+                  });
+                },
+                validator: (value) =>
+                    value == null ? 'Selecione uma categoria' : null,
               ),
             ],
           ),
