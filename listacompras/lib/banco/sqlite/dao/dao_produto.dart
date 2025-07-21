@@ -10,7 +10,6 @@ class ProdutoDAO {
 
     final dados = {
       'nome': produto.nome,
-      'quantidade': produto.quantidade,
       'preco': produto.preco,
       'categoriaId': produto.categoriaId,
     };
@@ -36,7 +35,6 @@ class ProdutoDAO {
       return Produto(
         id: maps[i]['id'],
         nome: maps[i]['nome'],
-        quantidade: maps[i]['quantidade'],
         preco: maps[i]['preco'],
         categoriaId: maps[i]['categoriaId'],
       );
@@ -56,7 +54,6 @@ class ProdutoDAO {
       return Produto(
         id: maps[0]['id'],
         nome: maps[0]['nome'],
-        quantidade: maps[0]['quantidade'],
         preco: maps[0]['preco'],
         categoriaId: maps[0]['categoriaId'],
       );

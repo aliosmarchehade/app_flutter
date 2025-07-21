@@ -39,7 +39,6 @@ class ScriptSQLite {
     CREATE TABLE produtos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
-      quantidade INTEGER NOT NULL,
       preco REAL NOT NULL,
       categoriaId INTEGER,
       FOREIGN KEY(categoriaId) REFERENCES categoria(id)

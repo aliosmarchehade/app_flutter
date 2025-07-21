@@ -8,8 +8,9 @@ import 'package:listacompras/widget/TelaOutros.dart';
 import 'package:listacompras/widget/TelaPetshop.dart';
 import 'package:listacompras/widget/TelaRoupas.dart';
 import 'package:listacompras/widget/TelaInicial.dart';
-import 'package:listacompras/widget/TelaMercado.dart';
+import 'package:listacompras/widget/FormSupermercado.dart';
 import 'package:listacompras/models/produtoScreen.dart';
+import 'package:listacompras/widget/listas/lista_compras_mercado.dart';
 import 'package:listacompras/widget/listas/lista_produtos.dart';
 
 
@@ -26,7 +27,7 @@ class Aplicativo extends StatelessWidget{
       initialRoute: Rotas.home,
       routes: {
         Rotas.home:(context) =>  TelaInicial(),
-        Rotas.supermercado:(context) => const TelaMercado(),
+        Rotas.supermercado:(context) => const FormCompraSupermercado(),
         Rotas.roupas:(context) => const TelaRoupas(),
         Rotas.farmacia:(context) => const TelaFarmacia(),
         Rotas.eletronicos:(context) => const TelaEletronicos(),
@@ -41,6 +42,7 @@ class Aplicativo extends StatelessWidget{
       //rotas de listas
 
       Rotas.listaprodutos:(context) => const ListaProdutosScreen(),
+      Rotas.listamercado: (context) => const ListaComprasScreen()
 
       },
     );

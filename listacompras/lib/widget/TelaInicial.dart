@@ -17,7 +17,8 @@ class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStat
   return ListView(
     padding: const EdgeInsets.all(20),
     children: [
-      _botao(context, 'Produtos', '/lista-produtos'),
+      _botao(context, 'Supermercado', '/lista-mercado'),
+      _botao(context, 'Produtos Gerais', '/lista-produtos'),
     ],
   );
 }

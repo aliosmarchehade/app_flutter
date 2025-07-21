@@ -18,7 +18,7 @@ class _FormProdutoState extends State<FormProduto> {
 
   final _nomeController = TextEditingController();
   final _precoController = TextEditingController();
-  final _quantidadeController = TextEditingController();
+ 
 
   int? _id;
   List<Categoria> _categorias = [];
@@ -45,7 +45,7 @@ class _FormProdutoState extends State<FormProduto> {
       _id = args.id;
       _nomeController.text = args.nome;
       _precoController.text = args.preco.toStringAsFixed(2);
-      _quantidadeController.text = args.quantidade.toString();
+   
 
       // Define a categoria selecionada (assume que as categorias já foram carregadas)
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -70,7 +70,6 @@ class _FormProdutoState extends State<FormProduto> {
         id: _id,
         nome: _nomeController.text,
         preco: double.tryParse(_precoController.text) ?? 0.0,
-        quantidade: int.tryParse(_quantidadeController.text) ?? 1,
         categoriaId: _categoriaSelecionada!.id!,
       );
       await _dao.salvar(produto);
@@ -83,7 +82,6 @@ class _FormProdutoState extends State<FormProduto> {
   void dispose() {
     _nomeController.dispose();
     _precoController.dispose();
-    _quantidadeController.dispose();
     super.dispose();
   }
 
@@ -123,16 +121,6 @@ class _FormProdutoState extends State<FormProduto> {
                 },
               ),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _quantidadeController,
-                decoration: const InputDecoration(labelText: 'Quantidade'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  final parsed = int.tryParse(value ?? '');
-                  if (parsed == null || parsed <= 0) return 'Quantidade inválida';
-                  return null;
-                },
-              ),
               const SizedBox(height: 12),
               DropdownButtonFormField<Categoria>(
                 value: _categoriaSelecionada,

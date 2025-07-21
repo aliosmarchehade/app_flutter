@@ -25,7 +25,7 @@ class _ListaProdutosScreenState extends State<ListaProdutosScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Produtos'),
+        title: const Text('Produtos Gerais'),
         actions: [
           IconButton(
             onPressed: _carregar,
@@ -55,7 +55,7 @@ class _ListaProdutosScreenState extends State<ListaProdutosScreen> {
       leading: const Icon(Icons.shopping_cart),
       title: Text(produto.nome),
       subtitle: Text(
-        'Preço: R\$ ${produto.preco.toStringAsFixed(2)} | Quantidade: ${produto.quantidade}',
+        'Preço: R\$ ${produto.preco.toStringAsFixed(2)}',
       ),
       onTap: () => Navigator.pushNamed(
         context,

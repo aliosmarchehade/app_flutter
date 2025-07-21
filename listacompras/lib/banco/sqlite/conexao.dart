@@ -33,7 +33,7 @@ class Conexao {
       final databasesPath = await databaseFactory.getDatabasesPath();
       path = join(databasesPath, 'compras.db');
     }
-    //await databaseFactory.deleteDatabase(path);
+    await databaseFactory.deleteDatabase(path);
     // Abrindo ou criando o banco de dados
     return await databaseFactory.openDatabase(
       path,
