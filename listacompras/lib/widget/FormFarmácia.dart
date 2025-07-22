@@ -7,14 +7,14 @@ import '../../models/produto.dart';
 import '../../models/categoria.dart';
 import '../../models/compra.dart';
 
-class FormCompraSupermercado extends StatefulWidget {
-  const FormCompraSupermercado({super.key});
+class FormFarmacia extends StatefulWidget {
+  const FormFarmacia({super.key});
 
   @override
-  State<FormCompraSupermercado> createState() => _FormCompraSupermercadoState();
+  State<FormFarmacia> createState() => _FormFarmaciaState();
 }
 
-class _FormCompraSupermercadoState extends State<FormCompraSupermercado> {
+class _FormFarmaciaState extends State<FormFarmacia> {
   final _formKey = GlobalKey<FormState>();
   final _daoCompra = DAOCompra();
   final _daoProduto = ProdutoDAO();
@@ -131,7 +131,7 @@ class _FormCompraSupermercadoState extends State<FormCompraSupermercado> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_compraEditando != null ? 'Editar Compra' : 'Nova Compra - Supermercado'),
+        title: Text(_compraEditando != null ? 'Editar Compra' : 'Compras Farmácia'),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),

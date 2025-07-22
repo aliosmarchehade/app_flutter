@@ -4,14 +4,14 @@ import '../../banco/sqlite/dao/dao_compras.dart';
 import '../../models/compra.dart';
 import '../../../configuracao/rotas.dart'; // adapte se o nome da rota for diferente
 
-class ListaComprasScreen extends StatefulWidget {
-  const ListaComprasScreen({super.key});
+class LisaFarmaciaScreen extends StatefulWidget {
+  const LisaFarmaciaScreen({super.key});
 
   @override
-  State<ListaComprasScreen> createState() => _ListaComprasScreenState();
+  State<LisaFarmaciaScreen> createState() => _LisaFarmaciaScreenState();
 }
 
-class _ListaComprasScreenState extends State<ListaComprasScreen> {
+class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
   final DAOCompra _dao = DAOCompra();
   List<Compra> _compras = [];
   bool _carregando = true;
@@ -26,7 +26,7 @@ class _ListaComprasScreenState extends State<ListaComprasScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Compras do Supermercado'),
+        title: const Text('Compras do Farmácia'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -46,7 +46,7 @@ class _ListaComprasScreenState extends State<ListaComprasScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(
           context,
-          Rotas.supermercado, // ajuste conforme a rota definida
+          Rotas.farmacia, // ajuste conforme a rota definida
         ).then((_) => _carregar()),
         child: const Icon(Icons.add),
       ),
@@ -55,7 +55,7 @@ class _ListaComprasScreenState extends State<ListaComprasScreen> {
 
  Widget _itemLista(Compra compra) {
   return ListTile(
-    leading: const Icon(Icons.shopping_cart),
+    leading: const Icon(Icons.local_pharmacy),
     title: Text(compra.nomeProduto),
     subtitle: Text(
       'Qtd: ${compra.quantidade} • Total: R\$ ${compra.precoTotal.toStringAsFixed(2)}\n'
@@ -69,7 +69,7 @@ class _ListaComprasScreenState extends State<ListaComprasScreen> {
     onTap: () {
       Navigator.pushNamed(
         context,
-        Rotas.supermercado, // rota do formulário
+        Rotas.farmacia, // rota do formulário
         arguments: compra,  // <== passa a compra como argumento para edição
       ).then((_) => _carregar());
     },

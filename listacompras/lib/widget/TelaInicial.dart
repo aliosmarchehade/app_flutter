@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:listacompras/widget/listas/lista_produtos.dart';
-
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({Key? key}) : super(key: key);
@@ -11,35 +9,6 @@ class TelaInicial extends StatefulWidget {
 
 class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  //botoes pra aba de listagem
-  Widget _buildListaAbas(BuildContext context) {
-  return ListView(
-    padding: const EdgeInsets.all(20),
-    children: [
-      _botao(context, 'Supermercado', '/lista-mercado'),
-      _botao(context, 'Produtos Gerais', '/lista-produtos'),
-    ],
-  );
-}
-
-Widget _botao(BuildContext context, String texto, String rota) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: ElevatedButton.icon(
-      onPressed: () => Navigator.pushNamed(context, rota),
-      icon: const Icon(Icons.hourglass_bottom),
-      label: Text(texto),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        foregroundColor: const Color.fromARGB(255, 76, 19, 175),
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    ),
-  );
-}
-
 
   final List<Tab> _abas = const [
     Tab(icon: Icon(Icons.folder_copy_outlined), text: 'Cadastros'),
@@ -58,6 +27,35 @@ Widget _botao(BuildContext context, String texto, String rota) {
     super.dispose();
   }
 
+  Widget _buildListaAbas(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        _botao(context, 'Supermercado', '/lista-mercado'),
+        _botao(context, 'Roupas', '/lista-roupas'),
+        _botao(context, 'Farmácia', '/lista-farmacia'),
+        _botao(context, 'Produtos Gerais', '/lista-produtos'),
+      ],
+    );
+  }
+
+  Widget _botao(BuildContext context, String texto, String rota) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: ElevatedButton.icon(
+        onPressed: () => Navigator.pushNamed(context, rota),
+        icon: const Icon(Icons.list),
+        label: Text(texto),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          foregroundColor: const Color.fromARGB(255, 76, 19, 175),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -71,7 +69,6 @@ Widget _botao(BuildContext context, String texto, String rota) {
         elevation: 0,
         title: const Text(
           'Escolha um segmento',
-          
           style: TextStyle(color: Colors.white),
         ),
         bottom: TabBar(
@@ -86,7 +83,7 @@ Widget _botao(BuildContext context, String texto, String rota) {
         controller: _tabController,
         children: [
           _buildCards(context, screenWidth, spacing),
-          _buildListaAbas(context)
+          _buildListaAbas(context),
         ],
       ),
     );
@@ -134,7 +131,7 @@ Widget _botao(BuildContext context, String texto, String rota) {
     {'title': 'Petshop', 'icon': Icons.pets, 'route': '/petshop'},
     {'title': 'Mecânica', 'icon': Icons.car_repair, 'route': '/mecanica'},
     {'title': 'Outros (em breve)', 'icon': Icons.hourglass_bottom, 'route': '/outros'},
-    {'title': 'Produtos', 'icon': Icons.hourglass_bottom, 'route': '/produtos'},
+    {'title': 'Produtos', 'icon': Icons.local_offer, 'route': '/produtos'},
     {'title': 'Categorias', 'icon': Icons.category, 'route': '/categoria'},
   ];
 
@@ -146,6 +143,7 @@ Widget _botao(BuildContext context, String texto, String rota) {
     double screenWidth,
   ) {
     final bool isSmall = screenWidth < 400;
+    final bool isProdutos = title == 'Produtos';
 
     return InkWell(
       onTap: () {
@@ -160,7 +158,12 @@ Widget _botao(BuildContext context, String texto, String rota) {
         child: Card(
           color: Colors.white,
           elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: isProdutos
+                ? const BorderSide(color: Color.fromARGB(255, 212, 182, 8), width: 4) // Dourado
+                : BorderSide.none,
+          ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(

@@ -52,7 +52,7 @@ class _ListaProdutosScreenState extends State<ListaProdutosScreen> {
 
   Widget _itemLista(Produto produto) {
     return ListTile(
-      leading: const Icon(Icons.shopping_cart),
+      leading: const Icon(Icons.local_offer),
       title: Text(produto.nome),
       subtitle: Text(
         'Preço: R\$ ${produto.preco.toStringAsFixed(2)}',

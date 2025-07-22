@@ -45,12 +45,24 @@ class ScriptSQLite {
     )
     '''
   ];
+ static List<List<String>> comandosInsercoes = [
+    // Inserções para a tabela compras 
+    [],
 
-  static List<List<String>> comandosInsercoes = [
+    // Inserções para a tabela roupas
+    [],
+
+    // Inserções para a tabela medicamento
+    [],
+
+    // Inserções para a tabela categoria
     [
+      '''INSERT INTO categoria (nome, descricao) VALUES ('Supermercado', 'Alimentos e produtos de uso doméstico')''',
+      '''INSERT INTO categoria (nome, descricao) VALUES ('Petshop', 'Produtos e serviços para animais')''',
+      '''INSERT INTO categoria (nome, descricao) VALUES ('Farmácia', 'Medicamentos e produtos de saúde')''',
+      '''INSERT INTO categoria (nome, descricao) VALUES ('Roupas', 'Vestuário masculino e feminino')''',
+      '''INSERT INTO categoria (nome, descricao) VALUES ('Mecânica', 'Aparelhos e dispositivos eletrônicos')''',
+      '''INSERT INTO categoria (nome, descricao) VALUES ('Eletrônicos', 'Aparelhos e dispositivos eletrônicos')''',
     ],
-    [],
-    [],
-    [],
   ];
 }
