@@ -12,6 +12,7 @@ import 'package:listacompras/widget/FormSupermercado.dart';
 import 'package:listacompras/models/produtoScreen.dart';
 import 'package:listacompras/widget/listas/lista_compras_mercado.dart';
 import 'package:listacompras/widget/listas/lista_farmacia.dart';
+import 'package:listacompras/widget/listas/lista_favoritos.dart';
 import 'package:listacompras/widget/listas/lista_produtos.dart';
 import 'package:listacompras/widget/listas/lista_roupas.dart';
 
@@ -46,7 +47,8 @@ class Aplicativo extends StatelessWidget{
       Rotas.listaprodutos:(context) => const ListaProdutosScreen(),
       Rotas.listamercado: (context) => const ListaComprasScreen(),
       Rotas.listaroupas: (context) => const ListaRoupasScreen(),
-      Rotas.listafarmacia: (context) => const LisaFarmaciaScreen()
+      Rotas.listafarmacia: (context) => const LisaFarmaciaScreen(),
+      Rotas.listafavoritos: (context) => const ListaFavoritosScreen()
 
       },
     );

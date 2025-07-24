@@ -17,4 +17,5 @@ class Rotas{
   static const String listamercado = '/lista-mercado';
   static const String listaroupas = '/lista-roupas';
   static const String listafarmacia = '/lista-farmacia';
+  static const String listafavoritos = '/lista-favoritos';
 }   

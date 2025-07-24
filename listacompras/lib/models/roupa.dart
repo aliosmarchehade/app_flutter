@@ -4,6 +4,7 @@ class Roupa {
   String? tamanho;
   String? marca;
   double? preco;
+  bool favorito; 
 
   Roupa({
     this.id,
@@ -11,5 +12,6 @@ class Roupa {
     this.tamanho,
     this.marca,
     this.preco,
+    this.favorito = false,
   });
 }

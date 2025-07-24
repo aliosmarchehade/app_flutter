@@ -4,13 +4,13 @@ import 'package:listacompras/models/compra.dart';
 
 class DAOCompra {
   final String _sqlSalvar = '''
-    INSERT OR REPLACE INTO compras (id, nomeProduto, dataCompra, quantidade, precoTotal)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT OR REPLACE INTO compras (id, nomeProduto, dataCompra, quantidade, precoTotal, categoria, favorito)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   ''';
 
   final String _sqlAtualizar = '''
     UPDATE compras SET 
-      nomeProduto = ?, dataCompra = ?, quantidade = ?, precoTotal = ?
+      nomeProduto = ?, dataCompra = ?, quantidade = ?, precoTotal = ?, categoria = ?, favorito = ?
     WHERE id = ?
   ''';
 
@@ -20,6 +20,10 @@ class DAOCompra {
 
   final String _sqlConsultarPorId = '''
     SELECT * FROM compras WHERE id = ?
+  ''';
+
+  final String _sqlConsultarPorCategoria = '''
+    SELECT * FROM compras WHERE categoria = ?
   ''';
 
   final String _sqlExcluir = '''
@@ -33,6 +37,8 @@ class DAOCompra {
       dataCompra: DateTime.parse(map['dataCompra'] as String),
       quantidade: map['quantidade'] as int,
       precoTotal: map['precoTotal'] as double,
+      categoria: map['categoria'] as String,
+      favorito: (map['favorito'] ?? 0) == 1,
     );
   }
 
@@ -43,6 +49,8 @@ class DAOCompra {
       'dataCompra': compra.dataCompra.toIso8601String(),
       'quantidade': compra.quantidade,
       'precoTotal': compra.precoTotal,
+      'categoria': compra.categoria,
+      'favorito': compra.favorito ? 1 : 0,
     };
   }
 
@@ -55,6 +63,8 @@ class DAOCompra {
         compra.dataCompra.toIso8601String(),
         compra.quantidade,
         compra.precoTotal,
+        compra.categoria,
+        compra.favorito ? 1 : 0,
       ]);
     } catch (e) {
       throw Exception('Erro ao salvar compra: $e');
@@ -69,6 +79,8 @@ class DAOCompra {
         compra.dataCompra.toIso8601String(),
         compra.quantidade,
         compra.precoTotal,
+        compra.categoria,
+        compra.favorito ? 1 : 0,
         compra.id,
       ]);
     } catch (e) {
@@ -83,6 +95,16 @@ class DAOCompra {
       return Future.wait(maps.map((map) => _fromMap(map)));
     } catch (e) {
       throw Exception('Erro ao consultar compras: $e');
+    }
+  }
+
+  Future<List<Compra>> consultarPorCategoria(String categoria) async {
+    final db = await Conexao.database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.rawQuery(_sqlConsultarPorCategoria, [categoria]);
+      return Future.wait(maps.map((map) => _fromMap(map)));
+    } catch (e) {
+      throw Exception('Erro ao consultar por categoria: $e');
     }
   }
 

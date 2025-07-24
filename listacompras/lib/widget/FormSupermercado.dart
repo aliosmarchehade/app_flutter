@@ -52,13 +52,21 @@ class _FormCompraSupermercadoState extends State<FormCompraSupermercado> {
 
       _carregarCategorias().then((_) async {
         final produtos = await _daoProduto.buscarTodos();
-        final produto = produtos.firstWhere((p) => p.nome == args.nomeProduto, orElse: () => produtos.first);
-        final categoria = _categorias.firstWhere((c) => c.id == produto.categoriaId, orElse: () => _categorias.first);
+        final produto = produtos.firstWhere(
+          (p) => p.nome == args.nomeProduto,
+          orElse: () => produtos.first,
+        );
+        final categoria = _categorias.firstWhere(
+          (c) => c.id == produto.categoriaId,
+          orElse: () => _categorias.first,
+        );
 
         setState(() {
           _categoriaSelecionada = categoria;
           _produtoSelecionado = produto;
-          _produtosFiltrados = produtos.where((p) => p.categoriaId == categoria.id).toList();
+          _produtosFiltrados = produtos
+              .where((p) => p.categoriaId == categoria.id)
+              .toList();
         });
       });
     }
@@ -107,6 +115,7 @@ class _FormCompraSupermercadoState extends State<FormCompraSupermercado> {
         dataCompra: _dataCompra,
         quantidade: quantidade,
         precoTotal: precoTotal,
+        categoria: 'supermercado', // 👈 ESSENCIAL PARA SEPARAÇÃO DAS TELAS
       );
 
       if (_compraEditando != null) {
@@ -131,7 +140,11 @@ class _FormCompraSupermercadoState extends State<FormCompraSupermercado> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_compraEditando != null ? 'Editar Compra' : 'Nova Compra - Supermercado'),
+        title: Text(
+          _compraEditando != null
+              ? 'Editar Compra'
+              : 'Nova Compra - Supermercado',
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
@@ -172,7 +185,9 @@ class _FormCompraSupermercadoState extends State<FormCompraSupermercado> {
                 items: _produtosFiltrados.map((produto) {
                   return DropdownMenuItem(
                     value: produto,
-                    child: Text('${produto.nome} - R\$ ${produto.preco.toStringAsFixed(2)}'),
+                    child: Text(
+                      '${produto.nome} - R\$ ${produto.preco.toStringAsFixed(2)}',
+                    ),
                   );
                 }).toList(),
                 onChanged: (novoProduto) {
@@ -190,7 +205,9 @@ class _FormCompraSupermercadoState extends State<FormCompraSupermercado> {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   final parsed = int.tryParse(value ?? '');
-                  if (parsed == null || parsed <= 0) return 'Quantidade inválida';
+                  if (parsed == null || parsed <= 0) {
+                    return 'Quantidade inválida';
+                  }
                   return null;
                 },
               ),

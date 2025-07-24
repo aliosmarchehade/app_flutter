@@ -52,13 +52,21 @@ class _FormFarmaciaState extends State<FormFarmacia> {
 
       _carregarCategorias().then((_) async {
         final produtos = await _daoProduto.buscarTodos();
-        final produto = produtos.firstWhere((p) => p.nome == args.nomeProduto, orElse: () => produtos.first);
-        final categoria = _categorias.firstWhere((c) => c.id == produto.categoriaId, orElse: () => _categorias.first);
+        final produto = produtos.firstWhere(
+          (p) => p.nome == args.nomeProduto,
+          orElse: () => produtos.first,
+        );
+        final categoria = _categorias.firstWhere(
+          (c) => c.id == produto.categoriaId,
+          orElse: () => _categorias.first,
+        );
 
         setState(() {
           _categoriaSelecionada = categoria;
           _produtoSelecionado = produto;
-          _produtosFiltrados = produtos.where((p) => p.categoriaId == categoria.id).toList();
+          _produtosFiltrados = produtos
+              .where((p) => p.categoriaId == categoria.id)
+              .toList();
         });
       });
     }
@@ -107,6 +115,7 @@ class _FormFarmaciaState extends State<FormFarmacia> {
         dataCompra: _dataCompra,
         quantidade: quantidade,
         precoTotal: precoTotal,
+        categoria: 'farmacia'
       );
 
       if (_compraEditando != null) {
@@ -131,7 +140,9 @@ class _FormFarmaciaState extends State<FormFarmacia> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_compraEditando != null ? 'Editar Compra' : 'Compras Farmácia'),
+        title: Text(_compraEditando != null
+            ? 'Editar Compra'
+            : 'Nova Compra - Farmácia'),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
@@ -190,7 +201,9 @@ class _FormFarmaciaState extends State<FormFarmacia> {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   final parsed = int.tryParse(value ?? '');
-                  if (parsed == null || parsed <= 0) return 'Quantidade inválida';
+                  if (parsed == null || parsed <= 0) {
+                    return 'Quantidade inválida';
+                  }
                   return null;
                 },
               ),

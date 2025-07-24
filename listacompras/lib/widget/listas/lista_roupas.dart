@@ -75,6 +75,39 @@ class _ListaRoupasScreenState extends State<ListaRoupasScreen> {
         'Preço: R\$ ${roupa.preco?.toStringAsFixed(2)}',
       ),
       isThreeLine: true,
+      trailing: Wrap(
+        spacing: 12,
+        children: [
+          IconButton(
+            icon: Icon(
+              roupa.favorito ? Icons.star : Icons.star_border,
+              color: roupa.favorito ? Colors.amber : Colors.grey,
+            ),
+            onPressed: () async {
+              final novaRoupa = Roupa(
+                id: roupa.id,
+                nomeRoupa: roupa.nomeRoupa,
+                tamanho: roupa.tamanho,
+                marca: roupa.marca,
+                preco: roupa.preco,
+                favorito: !roupa.favorito,
+              );
+              await _dao.salvar(novaRoupa);
+
+              setState(() {
+                final index = _roupas.indexWhere((r) => r.id == roupa.id);
+                if (index != -1) {
+                  _roupas[index] = novaRoupa;
+                }
+              });
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: () => _excluir(roupa),
+          ),
+        ],
+      ),
       onTap: () async {
         await Navigator.push(
           context,
@@ -85,10 +118,6 @@ class _ListaRoupasScreenState extends State<ListaRoupasScreen> {
         );
         _carregar();
       },
-      trailing: IconButton(
-        icon: const Icon(Icons.delete, color: Colors.red),
-        onPressed: () => _excluir(roupa),
-      ),
     );
   }
 }

@@ -79,7 +79,7 @@ class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
 
   Future<void> _carregar() async {
     setState(() => _carregando = true);
-    _compras = await _dao.consultarTodos();
+    // _compras = await _dao.consultarPorCategoria("farmacia");
     setState(() => _carregando = false);
   }
 

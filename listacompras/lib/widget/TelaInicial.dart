@@ -34,17 +34,20 @@ class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStat
         _botao(context, 'Supermercado', '/lista-mercado'),
         _botao(context, 'Roupas', '/lista-roupas'),
         _botao(context, 'Farmácia', '/lista-farmacia'),
-        _botao(context, 'Produtos Gerais', '/lista-produtos'),
+        // Aqui passo um ícone diferente (estrela)
+        _botao(context, 'Favoritos', '/lista-favoritos', icon: Icons.star),
+        _botao(context, 'Produtos Gerais', '/lista-produtos', icon: Icons.all_inclusive_sharp),
       ],
     );
   }
 
-  Widget _botao(BuildContext context, String texto, String rota) {
+  // Agora o parâmetro "icon" é opcional e padrão é Icons.list
+  Widget _botao(BuildContext context, String texto, String rota, {IconData icon = Icons.list}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton.icon(
         onPressed: () => Navigator.pushNamed(context, rota),
-        icon: const Icon(Icons.list),
+        icon: Icon(icon),
         label: Text(texto),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
