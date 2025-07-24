@@ -34,7 +34,6 @@ class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStat
         _botao(context, 'Supermercado', '/lista-mercado'),
         _botao(context, 'Roupas', '/lista-roupas'),
         _botao(context, 'Farmácia', '/lista-farmacia'),
-        // Aqui passo um ícone diferente (estrela)
         _botao(context, 'Favoritos', '/lista-favoritos', icon: Icons.star),
         _botao(context, 'Produtos Gerais', '/lista-produtos', icon: Icons.all_inclusive_sharp),
       ],
