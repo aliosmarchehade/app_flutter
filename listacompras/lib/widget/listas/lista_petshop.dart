@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../banco/sqlite/dao/dao_compras.dart';
 import '../../models/compra.dart';
-import '../../../configuracao/rotas.dart'; // adapte se o nome da rota for diferente
+import '../../../configuracao/rotas.dart';
 
-class LisaFarmaciaScreen extends StatefulWidget {
-  const LisaFarmaciaScreen({super.key});
+class ListaPetshopScreen extends StatefulWidget {
+  const ListaPetshopScreen({super.key});
 
   @override
-  State<LisaFarmaciaScreen> createState() => _LisaFarmaciaScreenState();
+  State<ListaPetshopScreen> createState() => _ListaPetshopScreenState();
 }
 
-class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
+class _ListaPetshopScreenState extends State<ListaPetshopScreen> {
   final DAOCompra _dao = DAOCompra();
   List<Compra> _compras = [];
   bool _carregando = true;
@@ -26,7 +26,7 @@ class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Compras do Farmácia'),
+        title: const Text('Compras do Petshop'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -46,7 +46,7 @@ class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(
           context,
-          Rotas.farmacia, // ajuste conforme a rota definida
+          Rotas.petshop, // rota do formulário de petshop
         ).then((_) => _carregar()),
         child: const Icon(Icons.add),
       ),
@@ -55,7 +55,7 @@ class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
 
   Widget _itemLista(Compra compra) {
     return ListTile(
-      leading: const Icon(Icons.local_pharmacy),
+      leading: const Icon(Icons.pets),
       title: Text(compra.nomeProduto),
       subtitle: Text(
         'Qtd: ${compra.quantidade} • Total: R\$ ${compra.precoTotal.toStringAsFixed(2)}\n'
@@ -99,8 +99,8 @@ class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          Rotas.farmacia, // rota do formulário
-          arguments: compra, // edição
+          Rotas.petshop, // rota do formulário de edição
+          arguments: compra,
         ).then((_) => _carregar());
       },
     );
@@ -108,7 +108,7 @@ class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
 
   Future<void> _carregar() async {
     setState(() => _carregando = true);
-    _compras = await _dao.consultarPorCategoria("farmacia");
+    _compras = await _dao.consultarPorCategoria("petshop");
     setState(() => _carregando = false);
   }
 

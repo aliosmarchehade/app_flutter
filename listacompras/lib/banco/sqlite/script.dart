@@ -23,15 +23,6 @@ class ScriptSQLite {
     )
     ''',
     '''
-    CREATE TABLE medicamento (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nomeMedicamento TEXT,
-      dosagem TEXT,
-      fabricante TEXT,
-      preco REAL
-    )
-    ''',
-    '''
     CREATE TABLE favorito (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL

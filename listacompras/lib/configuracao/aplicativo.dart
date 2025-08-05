@@ -6,13 +6,14 @@ import 'package:listacompras/widget/FormRoupas.dart';
 import 'package:listacompras/widget/TelaEletronicos.dart';
 import 'package:listacompras/widget/TelaMecanica.dart';
 import 'package:listacompras/widget/TelaOutros.dart';
-import 'package:listacompras/widget/TelaPetshop.dart';
+import 'package:listacompras/widget/FormPetshop.dart';
 import 'package:listacompras/widget/TelaInicial.dart';
 import 'package:listacompras/widget/FormSupermercado.dart';
 import 'package:listacompras/models/produtoScreen.dart';
 import 'package:listacompras/widget/listas/lista_compras_mercado.dart';
 import 'package:listacompras/widget/listas/lista_farmacia.dart';
 import 'package:listacompras/widget/listas/lista_favoritos.dart';
+import 'package:listacompras/widget/listas/lista_petshop.dart';
 import 'package:listacompras/widget/listas/lista_produtos.dart';
 import 'package:listacompras/widget/listas/lista_roupas.dart';
 
@@ -34,7 +35,7 @@ class Aplicativo extends StatelessWidget{
         Rotas.roupas:(context) => const FormRoupas(),
         Rotas.farmacia:(context) => const FormFarmacia(),
         Rotas.eletronicos:(context) => const TelaEletronicos(),
-        Rotas.petshop:(context) => const TelaPetshop(),
+        Rotas.petshop:(context) => const FormPetshop(),
         Rotas.mecanica:(context) => const TelaMecanica(),
         Rotas.outros:(context) => const TelaOutros(),
         Rotas.produtos: (context) => const FormProduto(),
@@ -48,7 +49,8 @@ class Aplicativo extends StatelessWidget{
       Rotas.listamercado: (context) => const ListaComprasScreen(),
       Rotas.listaroupas: (context) => const ListaRoupasScreen(),
       Rotas.listafarmacia: (context) => const LisaFarmaciaScreen(),
-      Rotas.listafavoritos: (context) => const ListaFavoritosScreen()
+      Rotas.listafavoritos: (context) => const ListaFavoritosScreen(),
+      Rotas.listapetshop: (context) => const ListaPetshopScreen()
 
       },
     );

@@ -12,10 +12,12 @@ class Rotas{
   static const String categoria = '/categoria';
 
 
+
   //rota de listas
   static const String listaprodutos= '/lista-produtos';
   static const String listamercado = '/lista-mercado';
   static const String listaroupas = '/lista-roupas';
   static const String listafarmacia = '/lista-farmacia';
   static const String listafavoritos = '/lista-favoritos';
+  static const String listapetshop = '/lista-petshop';
 }   

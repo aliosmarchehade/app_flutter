@@ -15,8 +15,7 @@ class ListaFavoritosScreen extends StatefulWidget {
 class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
   final DAOCompra _daoCompra = DAOCompra();
   final DAORoupa _daoRoupa = DAORoupa();
-  
-  // Agora armazenamos "categoria" e "itens" (que podem ser Compra ou Roupa)
+
   Map<String, List<dynamic>> _favoritosPorCategoria = {};
   bool _carregando = true;
 
@@ -63,74 +62,74 @@ class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
         ),
       ),
       children: favoritos.map((item) {
-        if (item is Compra) {
-          return _tileCompra(item);
-        } else if (item is Roupa) {
-          return _tileRoupa(item);
-        } else {
-          return const SizedBox();
-        }
+        return _tileGenerico(item);
       }).toList(),
     );
   }
 
-  Widget _tileCompra(Compra compra) {
-    return ListTile(
-      leading: const Icon(Icons.shopping_cart),
-      title: Text(compra.nomeProduto),
-      subtitle: Text(
-        'Qtd: ${compra.quantidade} • Total: R\$ ${compra.precoTotal.toStringAsFixed(2)}\n'
-        'Data: ${DateFormat('dd/MM/yyyy').format(compra.dataCompra)}',
-      ),
-      trailing: IconButton(
-        icon: Icon(
-          compra.favorito ? Icons.star : Icons.star_border,
-          color: compra.favorito ? Colors.amber : Colors.grey,
+  /// NOVO MÉTODO: retorna o ListTile correto com ícone por tipo
+  Widget _tileGenerico(dynamic item) {
+    if (item is Compra) {
+      return ListTile(
+        leading: const Icon(Icons.shopping_cart), // Ícone para Compra
+        title: Text(item.nomeProduto),
+        subtitle: Text(
+          'Qtd: ${item.quantidade} • Total: R\$ ${item.precoTotal.toStringAsFixed(2)}\n'
+          'Data: ${DateFormat('dd/MM/yyyy').format(item.dataCompra)}',
         ),
-        onPressed: () async {
-          final atualizado = Compra(
-            id: compra.id,
-            nomeProduto: compra.nomeProduto,
-            quantidade: compra.quantidade,
-            precoTotal: compra.precoTotal,
-            dataCompra: compra.dataCompra,
-            categoria: compra.categoria,
-            favorito: !compra.favorito,
-          );
-          await _daoCompra.salvar(atualizado);
-          _carregar();
-        },
-      ),
-    );
-  }
-
-  Widget _tileRoupa(Roupa roupa) {
-    return ListTile(
-      leading: const Icon(Icons.checkroom),
-      title: Text(roupa.nomeRoupa),
-      subtitle: Text(
-        'Marca: ${roupa.marca ?? 'N/A'} • Tamanho: ${roupa.tamanho}\n'
-        'Preço: R\$ ${roupa.preco?.toStringAsFixed(2)}',
-      ),
-      trailing: IconButton(
-        icon: Icon(
-          roupa.favorito ? Icons.star : Icons.star_border,
-          color: roupa.favorito ? Colors.amber : Colors.grey,
+        trailing: IconButton(
+          icon: Icon(
+            item.favorito ? Icons.star : Icons.star_border,
+            color: item.favorito ? Colors.amber : Colors.grey,
+          ),
+          onPressed: () async {
+            final atualizado = Compra(
+              id: item.id,
+              nomeProduto: item.nomeProduto,
+              quantidade: item.quantidade,
+              precoTotal: item.precoTotal,
+              dataCompra: item.dataCompra,
+              categoria: item.categoria,
+              favorito: !item.favorito,
+            );
+            await _daoCompra.salvar(atualizado);
+            _carregar();
+          },
         ),
-        onPressed: () async {
-          final atualizado = Roupa(
-            id: roupa.id,
-            nomeRoupa: roupa.nomeRoupa,
-            tamanho: roupa.tamanho,
-            marca: roupa.marca,
-            preco: roupa.preco,
-            favorito: !roupa.favorito,
-          );
-          await _daoRoupa.salvar(atualizado);
-          _carregar();
-        },
-      ),
-    );
+      );
+    } else if (item is Roupa) {
+      return ListTile(
+        leading: const Icon(Icons.checkroom), // Ícone para Roupa
+        title: Text(item.nomeRoupa),
+        subtitle: Text(
+          'Marca: ${item.marca ?? 'N/A'} • Tamanho: ${item.tamanho}\n'
+          'Preço: R\$ ${item.preco?.toStringAsFixed(2)}',
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            item.favorito ? Icons.star : Icons.star_border,
+            color: item.favorito ? Colors.amber : Colors.grey,
+          ),
+          onPressed: () async {
+            final atualizado = Roupa(
+              id: item.id,
+              nomeRoupa: item.nomeRoupa,
+              tamanho: item.tamanho,
+              marca: item.marca,
+              preco: item.preco,
+              favorito: !item.favorito,
+            );
+            await _daoRoupa.salvar(atualizado);
+            _carregar();
+          },
+        ),
+      );
+    } else {
+      return const ListTile(
+        title: Text('Tipo não suportado'),
+        leading: Icon(Icons.help_outline),
+      );
+    }
   }
 
   Future<void> _carregar() async {
@@ -144,13 +143,13 @@ class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
 
     final Map<String, List<dynamic>> agrupados = {};
 
-    // Adiciona compras por categoria
+    // Agrupar por categoria das compras
     for (var compra in favoritosCompras) {
       agrupados.putIfAbsent(compra.categoria, () => []);
       agrupados[compra.categoria]!.add(compra);
     }
 
-    // Adiciona roupas na categoria "Roupas"
+    // Agrupar roupas em "Roupas"
     if (favoritosRoupas.isNotEmpty) {
       agrupados.putIfAbsent("Roupas", () => []);
       agrupados["Roupas"]!.addAll(favoritosRoupas);
