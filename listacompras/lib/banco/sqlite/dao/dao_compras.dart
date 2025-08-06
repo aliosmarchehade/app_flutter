@@ -4,14 +4,15 @@ import 'package:listacompras/models/compra.dart';
 
 class DAOCompra {
   final String _sqlSalvar = '''
-    INSERT OR REPLACE INTO compras (id, nomeProduto, dataCompra, quantidade, precoTotal, categoria, favorito)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT OR REPLACE INTO compras (id, nomeProduto, dataCompra, quantidade, precoTotal, categoria, favorito, tipoVeiculo)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+
   ''';
 
   final String _sqlAtualizar = '''
     UPDATE compras SET 
-      nomeProduto = ?, dataCompra = ?, quantidade = ?, precoTotal = ?, categoria = ?, favorito = ?
-    WHERE id = ?
+  nomeProduto = ?, dataCompra = ?, quantidade = ?, precoTotal = ?, categoria = ?, favorito = ?, tipoVeiculo = ?
+WHERE id = ?
   ''';
 
   final String _sqlConsultarTodos = '''
@@ -39,6 +40,7 @@ class DAOCompra {
       precoTotal: map['precoTotal'] as double,
       categoria: map['categoria'] as String,
       favorito: (map['favorito'] ?? 0) == 1,
+      tipoVeiculo: map['tipoVeiculo'] as String?,  // pode ser nulo
     );
   }
 
@@ -51,6 +53,7 @@ class DAOCompra {
       'precoTotal': compra.precoTotal,
       'categoria': compra.categoria,
       'favorito': compra.favorito ? 1 : 0,
+      'tipoVeiculo': compra.tipoVeiculo,  // pode ser null
     };
   }
 
@@ -65,6 +68,7 @@ class DAOCompra {
         compra.precoTotal,
         compra.categoria,
         compra.favorito ? 1 : 0,
+        compra.tipoVeiculo,  // novo campo
       ]);
     } catch (e) {
       throw Exception('Erro ao salvar compra: $e');
@@ -81,6 +85,7 @@ class DAOCompra {
         compra.precoTotal,
         compra.categoria,
         compra.favorito ? 1 : 0,
+        compra.tipoVeiculo,  // novo campo
         compra.id,
       ]);
     } catch (e) {

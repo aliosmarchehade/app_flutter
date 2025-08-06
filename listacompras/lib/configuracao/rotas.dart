@@ -20,4 +20,5 @@ class Rotas{
   static const String listafarmacia = '/lista-farmacia';
   static const String listafavoritos = '/lista-favoritos';
   static const String listapetshop = '/lista-petshop';
+  static const String listamecanica = 'lista-mecanica';
 }   

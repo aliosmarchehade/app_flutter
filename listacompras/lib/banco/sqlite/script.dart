@@ -8,7 +8,8 @@ class ScriptSQLite {
     quantidade INTEGER,
     precoTotal REAL,
     categoria TEXT,
-    favorito INTEGER DEFAULT 0
+    favorito INTEGER DEFAULT 0,
+    tipoVeiculo TEXT
 )
 
     ''',
@@ -69,7 +70,7 @@ class ScriptSQLite {
       '''INSERT INTO categoria (nome, descricao) VALUES ('Petshop', 'Produtos e serviços para animais')''',
       '''INSERT INTO categoria (nome, descricao) VALUES ('Farmácia', 'Medicamentos e produtos de saúde')''',
       '''INSERT INTO categoria (nome, descricao) VALUES ('Roupas', 'Vestuário masculino e feminino')''',
-      '''INSERT INTO categoria (nome, descricao) VALUES ('Mecânica', 'Aparelhos e dispositivos eletrônicos')''',
+      '''INSERT INTO categoria (nome, descricao) VALUES ('Mecanica', 'Aparelhos e dispositivos eletrônicos')''',
       '''INSERT INTO categoria (nome, descricao) VALUES ('Eletrônicos', 'Aparelhos e dispositivos eletrônicos')''',
     ],
   ];

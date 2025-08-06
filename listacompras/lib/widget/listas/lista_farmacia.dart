@@ -26,7 +26,7 @@ class _LisaFarmaciaScreenState extends State<LisaFarmaciaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Compras do Farmácia'),
+        title: const Text('Compras da Farmácia'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
