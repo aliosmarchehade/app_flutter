@@ -1,4 +1,3 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:listacompras/banco/sqlite/conexao.dart';
 import 'package:listacompras/models/roupa.dart';
 

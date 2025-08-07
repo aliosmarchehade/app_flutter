@@ -3,14 +3,14 @@ class Rotas{
   static const String supermercado = '/supermercado';  
   static const String roupas = '/roupas';  
   static const String farmacia = '/farmacia';
-  static const String eletronicos = '/eletronicos';
+  static const String Livraria = '/livraria';
   static const String petshop = '/petshop';
   static const String mecanica = '/mecanica';
   static const String outros = '/outros';
   static const String produtos = '/produtos';
   static const String cadastro = '/cadastro';
   static const String categoria = '/categoria';
-
+  static const String livro = '/formLivro';
 
 
   //rota de listas
@@ -21,4 +21,5 @@ class Rotas{
   static const String listafavoritos = '/lista-favoritos';
   static const String listapetshop = '/lista-petshop';
   static const String listamecanica = 'lista-mecanica';
+  static const String listalivros = '/lista-livros';
 }   

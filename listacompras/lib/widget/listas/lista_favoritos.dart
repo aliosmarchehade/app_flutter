@@ -1,9 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../banco/sqlite/dao/dao_compras.dart';
 import '../../banco/sqlite/dao/dao_roupa.dart';
+import '../../banco/sqlite/dao/dao_livros.dart'; // Importar DAOLivro
 import '../../models/compra.dart';
 import '../../models/roupa.dart';
+import '../../models/livro.dart'; // Importar Livro
 
 class ListaFavoritosScreen extends StatefulWidget {
   const ListaFavoritosScreen({super.key});
@@ -15,6 +18,7 @@ class ListaFavoritosScreen extends StatefulWidget {
 class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
   final DAOCompra _daoCompra = DAOCompra();
   final DAORoupa _daoRoupa = DAORoupa();
+  final DAOLivro _daoLivro = DAOLivro.instance; // Usar instância singleton
 
   Map<String, List<dynamic>> _favoritosPorCategoria = {};
   bool _carregando = true;
@@ -67,11 +71,10 @@ class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
     );
   }
 
-  /// NOVO MÉTODO: retorna o ListTile correto com ícone por tipo
   Widget _tileGenerico(dynamic item) {
     if (item is Compra) {
       return ListTile(
-        leading: const Icon(Icons.shopping_cart), // Ícone para Compra
+        leading: const Icon(Icons.shopping_cart),
         title: Text(item.nomeProduto),
         subtitle: Text(
           'Qtd: ${item.quantidade} • Total: R\$ ${item.precoTotal.toStringAsFixed(2)}\n'
@@ -99,7 +102,7 @@ class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
       );
     } else if (item is Roupa) {
       return ListTile(
-        leading: const Icon(Icons.checkroom), // Ícone para Roupa
+        leading: const Icon(Icons.checkroom),
         title: Text(item.nomeRoupa),
         subtitle: Text(
           'Marca: ${item.marca ?? 'N/A'} • Tamanho: ${item.tamanho}\n'
@@ -124,6 +127,32 @@ class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
           },
         ),
       );
+    } else if (item is Livro) {
+      return ListTile(
+        leading: const Icon(Icons.menu_book), // Ícone para Livro
+        title: Text(item.titulo),
+        subtitle: Text(
+          'Autor: ${item.autor ?? 'N/A'} • Preço: R\$ ${item.preco.toStringAsFixed(2)}',
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            item.favorito ? Icons.star : Icons.star_border,
+            color: item.favorito ? Colors.amber : Colors.grey,
+          ),
+          onPressed: () async {
+            final atualizado = Livro(
+              id: item.id,
+              titulo: item.titulo,
+              autor: item.autor,
+              preco: item.preco,
+              generoId: item.generoId,
+              favorito: !item.favorito,
+            );
+            await _daoLivro.salvar(atualizado);
+            _carregar();
+          },
+        ),
+      );
     } else {
       return const ListTile(
         title: Text('Tipo não suportado'),
@@ -137,9 +166,11 @@ class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
 
     final compras = await _daoCompra.consultarTodos();
     final roupas = await _daoRoupa.consultarTodos();
+    final livros = await _daoLivro.listar(); // Consultar livros
 
     final favoritosCompras = compras.where((c) => c.favorito).toList();
     final favoritosRoupas = roupas.where((r) => r.favorito).toList();
+    final favoritosLivros = livros.where((l) => l.favorito).toList(); // Filtrar livros favoritados
 
     final Map<String, List<dynamic>> agrupados = {};
 
@@ -153,6 +184,12 @@ class _ListaFavoritosScreenState extends State<ListaFavoritosScreen> {
     if (favoritosRoupas.isNotEmpty) {
       agrupados.putIfAbsent("Roupas", () => []);
       agrupados["Roupas"]!.addAll(favoritosRoupas);
+    }
+
+    // Agrupar livros em "Livros"
+    if (favoritosLivros.isNotEmpty) {
+      agrupados.putIfAbsent("Livros", () => []); // Nova categoria para livros
+      agrupados["Livros"]!.addAll(favoritosLivros);
     }
 
     setState(() {
